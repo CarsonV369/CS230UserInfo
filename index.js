@@ -1,57 +1,17 @@
-import express from "express"
-import mysql from "mysql"
-import cors from "cors"
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
 
-const app = express()
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
 
-const db = mysql.createConnection({
-    host: "localhost",
-    user:"root",
-    password:"B29gs746",
-    database:"test"
-})
-
-app.use(express.json())
-app.use(cors())
-
-app.get("/", (req,res)=>{
-    res.json("hello this is the backend")
-})
-
-app.get("/users", (req,res)=>{
-    const q = "SELECT * FROM users"
-    db.query(q,(err,data)=>{
-        if(err) return res.json("failed")
-        return res.json(data)
-    })
-})
-
-app.post("/users", (req,res)=>{
-    const q = "INSERT INTO users ('name','age','counrty','position','wage') VALUES (?)"
-    const values = [
-        req.body.name,
-        req.body.age,
-        req.body.country,
-        req.body.position,
-        req.body.wage,
-]
-
-    db.query(q,[values], (err, data)=>{
-        if(err) return res.json("failed")
-        return res.json("User has been added successfully")
-    })
-})
-
-app.delete("/users/:id", (req,res)=>{
-    const userId = req.params.id
-    const q = "DELETE FROM users WHERE id = ?"
-
-    db.query(q,[userId], (err,data)=>{
-        if (err) return res.json(err);
-        return res.json("User has been deleted successfully.")
-    })
-})
-
-app.listen(9800, ()=>{
-    console.log("Connected to backend!")
-})
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
